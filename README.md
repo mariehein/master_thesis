@@ -40,4 +40,5 @@ python run_hyperparameter_optimization.py --mode "IAD" --directory "give/hp_dire
 
 ## Bump Hunt
 
-To perform the bump hunt, one run needs to be performed for all signal region windows with `--N_runs 1` for the full data configuration or once per signal region window with `--k_fold` for the k-fold cross validation method. The respective directory is then specified in either `bh_full_data.py` or `bh_k_fold.py`. Note that the option `cwola` needs to be set true or false depending on what method is used. The bump hunt can only be performed with CWoLa or CATHODE in the current configuration.
+- **Full data configuration:** Perform one run for each signal region window with `--N_runs 1`. Run `bh_full_data.py`, specifying the respective directories. Note that the option `cwola` needs to be set true or false depending on what method is used. The bump hunt can only be performed with CWoLa or CATHODE in the current configuration.
+- **k-fold cross validation:** Perform one run for each signal region window with `--k_fold`. Run `bh_k_fold.py`, specifying the respective directories. Note that the option `cwola` needs to be set true or false depending on what method is used. The bump hunt can only be performed with CWoLa or CATHODE in the current configuration.
