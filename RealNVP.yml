@@ -1,0 +1,7 @@
+output_dim: 256
+reg: 0.01
+num_coupling: 40
+num_hidden: 2
+epochs: 50
+lr: 1e-4
+batch_size: 256

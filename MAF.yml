@@ -1,0 +1,6 @@
+num_layers: 15
+hidden_dim: [128]
+epochs: 100
+params: 2
+batch_size: 256
+lr: 1e-4
