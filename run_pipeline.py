@@ -35,6 +35,7 @@ parser.add_argument('--DE_logit', default=True, action="store_false")
 parser.add_argument('--DE_norm', default=True, action="store_false")
 parser.add_argument('--test_on_input', default=False, action="store_true")
 parser.add_argument('--gaussian_inputs', default=False, action="store_true")
+parser.add_argument('--supervised_normal_signal', default=False, action="store_true")
 parser.add_argument('--N_normal_inputs', default=4, type=int)
 
 #Classifier Arguments

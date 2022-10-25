@@ -13,7 +13,8 @@ from scipy.interpolate import interp1d
 
 envelope=False
 plot_all=False
-background=False
+background=True
+small = True
 
 sys_err = 0.2*np.sqrt(120000)
 sys_err = 0
@@ -136,77 +137,121 @@ def import_and_plot_min(path, label=None, color="grey", folder="rocs/"):
 	plot_fn(tpr,fpr,color,label)
 	return tpr,fpr
 
+def plot_end(name, ylim=20, small=True, background=True): 
+	x = np.linspace(0.00001, 1, 10000)
+	plt.plot(x, np.sqrt(x), color="black", linestyle="--", label="random")
+
+	plt.legend()
+	plt.grid()
+	if background:
+		plt.xscale("log")
+		plt.xlim(1e-5,1)
+	else:
+		plt.xlim(0,1)
+	plt.ylim(0, ylim)
+
+
+	plt.ylabel(r"$\epsilon_S/\sqrt{\epsilon_B}$")
+	if background:
+		plt.xlabel(r"$\epsilon_B$")
+	else:
+		plt.xlabel(r"$\epsilon_S$")
+
+	if small:
+		plt.subplots_adjust(bottom=0.15, left= 0.19, top = 0.92, right = 0.965)
+
+	#plt.title("IAD distortion")
+	if envelope:
+		plt.savefig("plots/combined/roc_.pdf")
+	else:	
+		plt.savefig("plots/combined/bumphunt/sic_"+name+".pdf")
+	plt.show()
+
 
 x = [0.2,0.4,0.6,0.8]
 y_supervised = [6.67e3, 9.19e2, 2.21e2, 4.53e1]
 y_cwola = [1.68e3, 2.41e2, 3.79e1, 3.24]
 y_cathode = [4.41e3, 5.01e2, 4.69e1, 3.24]
 
-plt.figure()
 
 #Standard setup
-"""
+small=True
+if small:
+	plt.figure(figsize=(5,3.75))
+else:
+	plt.figure()
 import_and_plot("roc_supervised_averaging", label="Supervised",color="green",folder="results/4_default/supervised/")
 import_and_plot("roc_IAD_averaging", label="IAD",color="grey",folder="results/4_default/IAD/")
 import_and_plot("roc_cathode_averaging", label="CATHODE", color="deeppink", folder="results/cathode/cathode_RealNVP_avg/")
 import_and_plot("roc_cwola_averaging", label="CWoLa",color="orange",folder="results/4_default/cwola/")
-"""
+name = "default_fpr"
+plot_end(name, background=background)
 
+small=True
+background=False
+if small:
+	plt.figure(figsize=(5,3.75))
+else:
+	plt.figure()
 import_and_plot("roc_cwola_averaging", label="model", color="C0", folder="results/4_default/cwola/", N_runs=1)
+name="example"
+plot_end(name, background=False, ylim=10)
+background=True
 
 #CATHODE
-"""
+small=True
+if small:
+	plt.figure(figsize=(5,3.75))
+else:
+	plt.figure()
 import_and_plot("roc_cathode_averaging", label="Default", color="C0", folder="results/cathode/cathode_RealNVP_avg/")
 import_and_plot("roc_cathode_averaging", label="Run for sliding window", color="C1", folder="results/cathode_sliding/window5/")
 import_and_plot("roc_test_avg", label="k-fold cross validation", color="C2", folder="results/k_fold/cathode_sliding/window5/")
-"""
+name = "cathode_fpr"
+plot_end(name, background=background)
+
 
 #CATHODE Signal
-"""
+small=True
+if small:
+	plt.figure(figsize=(5,3.75))
+else:
+	plt.figure()
 import_and_plot("roc_test_avg", label="0.64% (default)", color="C0", folder="results/k_fold/cathode_sliding/window5/")
 import_and_plot("roc_test_avg", label="0.4%", color="C1", folder="results/k_fold/cathode_sliding_04/window5/")
 import_and_plot("roc_test_avg", label="0.3%", color="C2", folder="results/k_fold/cathode_sliding_03/window5/")
-"""
+name = "cathode_signal_fpr"
+plot_end(name, background=background)
+
 
 #CWoLa
-"""
+small=True
+if small:
+	plt.figure(figsize=(5,3.75))
+else:
+	plt.figure()
 import_and_plot("roc_cwola_averaging", label="Default", color="C0", folder="results/4_default/cwola/")
 import_and_plot("roc_cwola_averaging", label="Run for sliding window", color="C1", folder="results/cwola_sliding/window5/")
 import_and_plot("roc_test_avg", label="k-fold cross validation", color="C2", folder="results/k_fold/cwola_sliding/window5/")
-"""
+name = "cwola_fpr"
+plot_end(name, background=background)
+
 
 #CWoLa Signal
-"""
+small=True
+if small:
+	plt.figure(figsize=(5,3.75))
+else:
+	plt.figure()
 import_and_plot("roc_test_avg", label="1.0%", color="C3", folder="results/k_fold/cwola_sliding_10/window5/")
 import_and_plot("roc_test_avg", label="0.64% (default)", color="C0", folder="results/k_fold/cwola_sliding/window5/")
 import_and_plot("roc_test_avg", label="0.3%", color="C2", folder="results/k_fold/cwola_sliding_03/window5/")
-"""
+name = "cwola_signal_fpr"
+plot_end(name, background=background)
 
 #plt.plot(x,y_cathode, '.',color="black")#deeppink mediumvioletred
 #plt.plot(x,y_cwola,'.',color="xkcd:pumpkin")
 #plt.plot(x,y_supervised,'.',color="limegreen")
 
-x = np.linspace(0.00001, 1, 10000)
-plt.plot(x, np.sqrt(x), color="black", linestyle="--", label="random")
-
-plt.legend()
-plt.grid()
-if background:
-	plt.xscale("log")
-	plt.xlim(1e-5,1)
-else:
-	plt.xlim(0,1)
-plt.ylim(0, 10)
-
-
-plt.ylabel(r"$\epsilon_S/\sqrt{\epsilon_B}$")
-if background:
-	plt.xlabel(r"$\epsilon_B$")
-else:
-	plt.xlabel(r"$\epsilon_S$")
-
-#plt.title("IAD distortion")
-plt.savefig("plots/combined/SIC_example.pdf")#bumphunt/sic_cwola_signal_fpr.pdf")
-plt.show()
 
 

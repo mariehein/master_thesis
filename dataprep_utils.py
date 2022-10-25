@@ -160,7 +160,13 @@ def classifier_data_prep(args, samples=None):
 	print(sum(outerdata[500000:,-1]))
 
 	if args.mode=="supervised":
-		sig_train, sig_val = np.array_split(inner_extra_sig[20000:],2)
+		if not args.supervised_normal_signal:
+			sig_train, sig_val = np.array_split(inner_extra_sig[20000:],2)
+		else: 
+			sig_train = innerdata[:60000]
+			sig_train = sig_train[sig_train[:,-1]==1]
+			sig_val = innerdata[60000:120000]
+			sig_val = sig_val[sig_val[:,-1]==1]
 		X_train = np.concatenate((samples_train, sig_train), axis=0)
 		Y_train = X_train[:,-1]
 		if args.gaussian_inputs:
